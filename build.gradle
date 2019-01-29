@@ -1,0 +1,27 @@
+buildscript {
+    String thorntailVersion = System.getProperty('thorntailVersion') ?: VERSION_THORNTAIL
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "io.thorntail:thorntail-gradle-plugin:$thorntailVersion"
+    }
+}
+
+String thorntailVersion = System.getProperty('thorntailVersion') ?: VERSION_THORNTAIL
+
+
+
+
+group 'ec.devnull'
+version '1.0.0-SNAPSHOT'
+
+
+
+repositories {
+    mavenCentral()
+}
+

@@ -1,0 +1,56 @@
+buildscript {
+    String thorntailVersion = System.getProperty('thorntailVersion') ?: VERSION_THORNTAIL
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "io.thorntail:thorntail-gradle-plugin:$thorntailVersion"
+    }
+}
+
+String thorntailVersion = System.getProperty('thorntailVersion') ?: VERSION_THORNTAIL
+
+apply plugin: 'thorntail'
+apply plugin: 'war'
+
+thorntail {
+    properties {
+        swarm.http.host = 'localhost'
+        swarm.http.port = 8181
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url 'https://maven.repository.redhat.com/nexus/content/repositories/thirdparty-releases/'
+    }
+    maven {
+        url "https://repo.gradle.org/gradle/libs-releases-local"
+    }
+}
+
+dependencies {
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
+    // Include the Thorntail BOM for compilation.
+    implementation enforcedPlatform("io.thorntail:bom-all:$thorntailVersion")
+    implementation "io.thorntail:cdi"
+    implementation "io.thorntail:jaxrs"
+    implementation "io.thorntail:jpa"
+    implementation "io.thorntail:microprofile"
+    implementation "commons-io:commons-io:2.4"
+    implementation "org.postgresql:postgresql:42.2.2"
+
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.gradle:gradle-tooling-api:${gradle.gradleVersion}"
+    testImplementation "io.thorntail:gradle-arquillian-adapter:$thorntailVersion"
+}
+
+test {
+    systemProperty 'thorntailVersion', thorntailVersion
+}
